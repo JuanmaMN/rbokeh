@@ -1,0 +1,157 @@
+---
+title: "Interactive plots with rbokeh"
+author: "Juanma Martinez"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(readr)
+data_plotly <- read_csv("data_plotly.csv")
+View(data_plotly)
+colnames(data_plotly)
+
+library(dplyr)
+
+# filter the data
+data_plotly_2<-data_plotly %>% filter (Year == "2015" & Continent %in% c("Europe","Africa","N.America","S.America","Oceania"))
+
+library(rbokeh)
+
+
+```
+
+Population -  HDI  - Life Expectancy {data-orientation=rows}
+=====================================  
+
+Columns {data-width=200, data-height=300}
+-------------------------------------
+
+###
+
+This flexdashboard has been written in [R Markdown](http://rmarkdown.rstudio.com), with **R** code chunks that use the following packages   [readr](https://cran.r-project.org/web/packages/readr/index.html), [rbokeh](http://hafen.github.io/rbokeh/index.html) [dplyr](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html)
+
+Data sources used:
+
+- [World bank](https://data.worldbank.org/) for Life expectancy
+
+- [HDI information](http://hdr.undp.org/en/content/human-development-index-hdi) for HDI data and definition.
+
+
+For code: [Github account](https://github.com/JuanmaMN/rbokeh)
+
+###
+
+**rbokeh package**
+
+-  Bokeh is a visualization package used for building interactive plots available in R.
+
+-  Please visit this great [tutorial](http://hafen.github.io/rbokeh/index.html) for more information.
+
+- Hover over the points to see the information for each spefic country.
+
+Column {data-width=800, data-height=700}
+-------------------------------------
+
+### Population VS HDI
+
+
+```{r echo=FALSE}
+
+
+tools <- c("pan", "wheel_zoom", "box_zoom", "box_select", "reset")
+
+
+dp1 <- figure(tools = tools, width = 700, height = 400, title="Population VS HDI") %>%
+  ly_points(Population, HDI, data = data_plotly_2, color = Continent,
+            hover = list(Country, Continent, HDI, Life_Expectancy, Population)) %>% x_axis(number_formatter = "numeral", format = "0,000", label =  "Population")
+
+dp1
+
+```
+
+### Population VS Life Expectancy
+
+```{r echo=FALSE}
+dp2<- figure (tools = tools, width = 700, height = 400, title = "Population VS Life Expectancy") %>%
+  ly_points (Population, Life_Expectancy,data = data_plotly_2, color = Continent,
+             hover= list (Country, Continent, HDI, Life_Expectancy, Population)) %>% x_axis(number_formatter = "numeral", format = "0,000", label =  "Population")
+
+dp2
+
+```
+
+
+4 variables {data-orientation=rows}
+=====================================  
+
+Columns {data-width=200, data-height=300}
+-------------------------------------
+
+###
+
+This flexdashboard has been written in [R Markdown](http://rmarkdown.rstudio.com), with **R** code chunks that use the following packages   [readr](https://cran.r-project.org/web/packages/readr/index.html), [rbokeh](http://hafen.github.io/rbokeh/index.html), [dplyr](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html)
+
+Data sources used:
+
+- [World bank](https://data.worldbank.org/). Data for 2017
+
+For code: [Github account](https://github.com/JuanmaMN/rbokeh)
+
+###
+
+
+**rbokeh package**
+
+-  Bokeh is a visualization package used for building interactive plots available in R.
+
+-  Please visit this great [tutorial](http://hafen.github.io/rbokeh/index.html) for more information.
+
+- Hover over the points to see the information for each spefic country.
+
+
+Column {data-width=800, data-height=700}
+-------------------------------------
+
+### Population VS GDP growth 
+
+
+```{r echo=FALSE}
+
+
+
+library(readr)
+WB_data2 <- read_csv("WB data2.csv", col_types = cols(Time_required_to_start_a_business_days_2017 = col_character()))
+View(WB_data2)
+
+
+tools <- c("pan", "wheel_zoom", "box_zoom", "box_select", "reset")
+
+
+dp3 <- figure(tools = tools, width = 700, height = 400, title="Population growth VS GDP growth - 2017 data") %>%
+  ly_points(Population_annual_growth_2017, GDP_annual_growth_2017, data = WB_data2, color = Continent,
+            hover = list(Country_Name, Continent, Population_annual_growth_2017, GDP_annual_growth_2017,
+                         GDP_per_capita_annual_growth_2017, Unemployment_perc_of_total_labor_force_modeled_ILO_estimate_2017))
+
+dp3
+
+```
+
+
+### Unemployment % (ILO) VS GDP per capita growth
+
+```{r echo=FALSE}
+dp4<- figure(tools = tools, width = 700, height = 400, title="Unemployment % (ILO) VS GDP per capita growth") %>%
+  ly_points(Unemployment_perc_of_total_labor_force_modeled_ILO_estimate_2017, GDP_per_capita_annual_growth_2017, data = WB_data2, color = Continent,
+            hover = list(Country_Name, Continent, Population_annual_growth_2017, GDP_annual_growth_2017,
+                         GDP_per_capita_annual_growth_2017, Unemployment_perc_of_total_labor_force_modeled_ILO_estimate_2017))
+
+
+dp4
+
+
+
+```
