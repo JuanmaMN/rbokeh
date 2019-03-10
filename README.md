@@ -16,7 +16,7 @@
 <img width="949" alt="rbokeh - 2" src="https://user-images.githubusercontent.com/37122520/54087128-e11ca280-4347-11e9-8fc8-151ee0178767.png">
 
 
-## **Third example Two plots together with a color theme **
+## **Third example Two plots together with a color theme**
 
 Two bokeh plots together. We can hover over one point in one of the graphs. That country will also be highlighted in the other graph.
 
